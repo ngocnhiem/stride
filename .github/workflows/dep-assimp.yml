@@ -230,7 +230,7 @@ jobs:
         id: nuget-login
         uses: NuGet/login@v1
         with:
-          user: ${{ vars.NUGET_USER }}
+          user: ${{ vars.STRIDE_NUGET_USER }}
 
       - name: Publish
         run: |
