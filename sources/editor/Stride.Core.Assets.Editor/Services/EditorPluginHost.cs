@@ -367,6 +367,8 @@ public abstract partial class EditorPluginHost : IAssetsPluginService, IPluginCo
         foreach (var plugin in Plugins.ToList())
             TryInitializeSession(plugin, session);
         sessionOpened = true;
+        // The plugins have joined and initialized the session: a crash from now on is not one while they load
+        LoadingMarker?.Remove();
     }
 
     /// <summary>

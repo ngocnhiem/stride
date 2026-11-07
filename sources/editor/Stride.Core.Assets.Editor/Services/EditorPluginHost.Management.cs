@@ -20,6 +20,13 @@ public abstract partial class EditorPluginHost
     public bool SafeMode { get; set; }
 
     /// <summary>
+    /// The marker written while the plugins join a session and removed once it has opened (<see cref="InitializeSession"/>),
+    /// or null to write none (tests, other hosts). The editors set the user's (<see cref="PluginLoadingMarker.CreateDefault"/>).
+    /// </summary>
+    [Experimental("STREXP002")]
+    public PluginLoadingMarker? LoadingMarker { get; set; }
+
+    /// <summary>
     /// Where the Editor packages switched off per session are kept, or null when nothing is switched off (tests, other hosts).
     /// The editors set the user's store (<see cref="DisabledEditorCompanionStore.CreateDefault"/>).
     /// </summary>
