@@ -34,16 +34,30 @@ public abstract partial class EditorPluginHost
     public DisabledEditorCompanionStore? DisabledCompanions { get; set; }
 
     /// <summary>
-    /// Creates the filter of the Editor companions a session loads: none of those switched off for that session, only the
-    /// built-in ones in safe mode. Each one left out gets the <see cref="PluginState.Off"/> state.
+    /// The extensions of the user, which every session the editor opens loads, or null for none (tests, other hosts). The
+    /// editors set the user's (<see cref="EditorExtensionService.CreateDefault"/>).
+    /// </summary>
+    [Experimental("STREXP002")]
+    public EditorExtensionService? Extensions { get; set; }
+
+    /// <summary>
+    /// Creates the filter of the Editor companions a session loads: none of those switched off for that session, nor the
+    /// extensions switched off, only the built-in ones in safe mode. Each one left out gets the <see cref="PluginState.Off"/> state.
     /// </summary>
     /// <param name="sessionPath">The session's file, or null for a session that has none yet (a new project).</param>
     [Experimental("STREXP002")]
     public ICompanionPackageFilter GetCompanionPackageFilter(UFile? sessionPath)
     {
         var switchedOff = sessionPath is not null && DisabledCompanions is { } store ? store.Get(sessionPath) : [];
-        return new EditorCompanionFilter(switchedOff, SafeMode, RecordOff);
+        return new EditorCompanionFilter(switchedOff, SafeMode, RecordOff, Extensions?.GetSwitchedOff());
     }
+
+    /// <summary>
+    /// What a session adds to the companions its packages declare: the extensions of the user (<see cref="Extensions"/>), or
+    /// null when there are none.
+    /// </summary>
+    [Experimental("STREXP002")]
+    public ICompanionPackageSource? GetCompanionPackageSource() => Extensions?.CreateSource();
 
     /// <summary>
     /// What a plugin registered and still has in place, counted by kind of contribution: the member of the plugin context it
