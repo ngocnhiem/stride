@@ -304,7 +304,7 @@ partial class PackageSession
         if (manifest is not null)
             package.SetCompanionDeclarations(manifest, Path.GetDirectoryName(manifestFile)!);
 
-        var container = new StandalonePackage(package) { IsDependencyPackage = true };
+        var container = new StandalonePackage(package) { IsDependencyPackage = true, IsDevRedirectPackage = true };
         container.AssetNamespace = PackageContainer.ResolveAssetNamespace(manifest?.AssetNamespace, package.AuthoredName ?? package.Meta.Name);
         if (manifest is not null)
         {
@@ -351,7 +351,7 @@ partial class PackageSession
             PrecomputedProjectAssets = [],
         };
         package.SetCompanionDeclarations(manifest, Path.GetDirectoryName(manifestFile)!);
-        var container = new StandalonePackage(package) { IsDependencyPackage = true };
+        var container = new StandalonePackage(package) { IsDependencyPackage = true, IsDevRedirectPackage = true };
         container.Assemblies.AddRange(WithDevBuildAssemblies(dependency.Assemblies, manifest, manifestFile));
         package.State = PackageState.DependenciesReady;
         return container;
